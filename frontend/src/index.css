@@ -2,6 +2,10 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
+/* Enables the `dark:` variant to be driven by a `.dark` class on <html>
+   (added/removed by ThemeContext) instead of only the OS preference. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme{
     --font-display: "Poppins", "sans-serif";
     --breakpoint-3xl: 1920px;
@@ -14,7 +18,33 @@
     }
 
     body{
-       
         overflow-x: hidden;
+        @apply bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-100;
     }
+
+    /* Smoothly animate the color-scheme switch across the whole app
+       instead of an abrupt flash when dark mode is toggled. */
+    html.theme-transition,
+    html.theme-transition *,
+    html.theme-transition *::before,
+    html.theme-transition *::after {
+        transition: background-color 450ms ease, border-color 450ms ease,
+            color 450ms ease, fill 450ms ease, stroke 450ms ease,
+            box-shadow 450ms ease !important;
+    }
+}
+
+@keyframes theme-toggle-pop {
+    0% {
+        transform: scale(0.6) rotate(-45deg);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+.theme-toggle-icon {
+    animation: theme-toggle-pop 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
